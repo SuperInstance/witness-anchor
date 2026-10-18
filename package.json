@@ -6,10 +6,12 @@
   "description": "The fleet's OUT-OF-BAND witness anchor -- a Cloudflare Worker that publishes signed heads and computes the linkage class from EVIDENCE, not from a claim",
   "scripts": {
     "test": "node --test test/*.test.mjs",
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "measure": "node scripts/run-measurement.mjs",
+    "judge": "node scripts/run-judge-measurement.mjs",
+    "compare": "node scripts/compare-methods.mjs",
+    "corpus": "node scripts/build-corpus.mjs"
   },
   "devDependencies": {
-    "miniflare": "^4.0.0"
+    "miniflare": "^4.20260730.0"
   }
 }
