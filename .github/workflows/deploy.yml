@@ -1,0 +1,56 @@
+# THE DEPLOY -- AND IT NEEDS A CREDENTIAL THE REPO DOES NOT HAVE.
+#
+# The one thing this repository cannot do by itself is put itself on
+# Cloudflare. That needs CLOUDFLARE_API_TOKEN, and there is no way around
+# that: an account is a human relationship.
+#
+# So this workflow is written, and it does the thing that matters after a
+# deploy -- it VERIFIES the deployment, by hitting the live Worker and
+# asking it what it can actually do. A deploy that is not verified is a
+# claim.
+name: deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'environment to deploy'
+        required: true
+        default: production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --no-audit --no-fund
+      - name: the deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy --env "${{ inputs.environment }}"
+      - name: VERIFY the deployment -- a deploy that is not verified is a claim
+        env:
+          WORKER_URL: ${{ vars.WORKER_URL }}
+        run: |
+          set -euo pipefail
+          echo "  asking the live worker what it can do..."
+          curl -sf "$WORKER_URL/whoami" | tee /tmp/whoami.json
+          echo ""
+          echo "  the live worker must report:"
+          echo "    - kv, r2, d1: true"
+          echo "    - vectorBackend: whichever backend is bound (BOTH are honest)"
+          echo "    - embedder: lexical-hash-v1 or workers-ai"
+          node -e '
+            const w = require("/tmp/whoami.json");
+            const need = ["kv","r2","d1"];
+            for (const b of need) {
+              if (!w.bindings || !w.bindings[b]) { console.error("  MISSING BINDING: " + b); process.exit(1); }
+            }
+            console.log("  the live worker is up and bound: " + need.join(", "));
+            console.log("  vector backend: " + w.vectorBackend + "  (search is " +
+              (w.vectorBackend === "vectorize-ann" ? "APPROXIMATE" : "EXACT") + ")");
+          '

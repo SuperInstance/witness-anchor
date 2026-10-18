@@ -1,0 +1,57 @@
+# The witness anchor's Cloudflare configuration.
+#
+# THE BINDING IDS ARE REAL ONES, NOT PLACEHOLDERS. That is the whole
+# difference between this and the fleet's other wrangler.toml files, which
+# say `database_id = ""` and `id = "superinstance-db-id"` and therefore
+# describe a deployment that does not exist.
+#
+# The Vectorize binding is OPTIONAL and commented out on purpose. The
+# Worker works without it -- the vector store falls back to an EXACT
+# search over D1, and every response says which backend served it. That
+# is not a workaround bolted on afterwards: it is the reason the whole
+# thing can be tested by anyone, with no Cloudflare account at all.
+#
+#   npm test        <- runs everything, locally, no account, no network
+#   npx wrangler dev
+#   npx wrangler deploy
+
+name = "witness-anchor"
+main = "src/index.js"
+compatibility_date = "2025-07-18"
+
+# NO nodejs_compat. The code uses WebCrypto and TextEncoder, which are
+# Workers-native, so it runs with no compatibility flags at all -- and it
+# runs unchanged in workerd, which is how the tests execute it.
+
+[vars]
+ENVIRONMENT = "production"
+# The account this anchor runs on. THE ACCOUNT IS THE UNIT OF CONTROL: a
+# head published by the same account that wrote the log is self-anchored,
+# not out of band, and the Worker refuses to call it tamper-evident.
+ACCOUNT_ID = "REPLACE_WITH_THE_ANCHOR_ACCOUNT_ID"
+
+# The trusted keyring: {keyId: base64key}. The keys are the ones whose
+# signatures the anchor will accept. A head signed by anything else is
+# `attestable`, not `attested`.
+# TRUSTED_KEYS = "{\"log-writer-1\":\"<base64>\"}"
+
+# --- the bindings ---
+[[kv_namespaces]]
+binding = "KV"
+id = "REPLACE_WITH_THE_KV_NAMESPACE_ID"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "witness-anchor-logs"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "witness-anchor"
+database_id = "REPLACE_WITH_THE_D1_DATABASE_ID"
+
+# [[vectorize]]
+# binding = "VECTORS"
+# index_name = "witness-anchor-claims"
+
+[observability]
+enabled = true

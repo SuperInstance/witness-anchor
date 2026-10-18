@@ -1,0 +1,31 @@
+# THE CI THAT NEEDS NO CLOUDFLARE ACCOUNT.
+#
+# Every other Cloudflare artifact in this fleet is verified by a workflow
+# that either has no tests or cannot run them, because the code it guards
+# needs a live account. This one runs the WHOLE Worker -- real KV, real
+# R2, real D1, and the exact D1-backed vector store -- inside workerd, on
+# a stock ubuntu runner, with no credentials at all.
+#
+# That is not a small thing. It is the difference between a conformance
+# suite and a comment.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --no-audit --no-fund
+      - name: the whole test suite, locally, with no Cloudflare account
+        run: npm test
+      - name: the classification matrix, on its own, because it is the point
+        run: node --test test/classify.test.mjs

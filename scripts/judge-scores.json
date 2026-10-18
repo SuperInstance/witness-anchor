@@ -1,0 +1,485 @@
+{
+ "at": "2026-10-18T22:59:33.876Z",
+ "questions": {
+  "literal": "This document uses the phrase \"tamper-evident\" to describe a log, a receipt, or a ledger.",
+  "intent": "This document makes a claim that a record cannot be silently changed or rewritten without anyone being able to detect it."
+ },
+ "results": [
+  {
+   "id": "P:witness-spec/README.md",
+   "path": "witness-spec/README.md",
+   "positive": true,
+   "literal": 0.96,
+   "intent": 0.07
+  },
+  {
+   "id": "P:witness-spec/SPEC.md",
+   "path": "witness-spec/SPEC.md",
+   "positive": true,
+   "literal": 0.93,
+   "intent": 0.15
+  },
+  {
+   "id": "P:witness-spec/ref/chain.py",
+   "path": "witness-spec/ref/chain.py",
+   "positive": true,
+   "literal": 0.05,
+   "intent": 0.12
+  },
+  {
+   "id": "P:witness-spec/test/tamper.test.mjs",
+   "path": "witness-spec/test/tamper.test.mjs",
+   "positive": true,
+   "literal": 0.95,
+   "intent": 0.1
+  },
+  {
+   "id": "P:quilt-claw/witness/README.md",
+   "path": "quilt-claw/witness/README.md",
+   "positive": true,
+   "literal": 0.85,
+   "intent": 0.08
+  },
+  {
+   "id": "P:quilt-claw/witness/ledger.js",
+   "path": "quilt-claw/witness/ledger.js",
+   "positive": true,
+   "literal": 0.91,
+   "intent": 0.13
+  },
+  {
+   "id": "P:AI-Writings/.github/workflows/corpus.yml",
+   "path": "AI-Writings/.github/workflows/corpus.yml",
+   "positive": true,
+   "literal": 0.58,
+   "intent": 0.15
+  },
+  {
+   "id": "P:AI-Writings/bots/README.md",
+   "path": "AI-Writings/bots/README.md",
+   "positive": true,
+   "literal": 0.83,
+   "intent": 0.09
+  },
+  {
+   "id": "P:AI-Writings/labs/situation-recorder/README.md",
+   "path": "AI-Writings/labs/situation-recorder/README.md",
+   "positive": true,
+   "literal": 0.96,
+   "intent": 0.19
+  },
+  {
+   "id": "P:AI-Writings/labs/situation-recorder/draw_local.py",
+   "path": "AI-Writings/labs/situation-recorder/draw_local.py",
+   "positive": true,
+   "literal": 0.95,
+   "intent": 0.2
+  },
+  {
+   "id": "P:AI-Writings/labs/situation-recorder/recorder.py",
+   "path": "AI-Writings/labs/situation-recorder/recorder.py",
+   "positive": true,
+   "literal": 0.97,
+   "intent": 0.1
+  },
+  {
+   "id": "P:AI-Writings/labs/situation-recorder/run_all.sh",
+   "path": "AI-Writings/labs/situation-recorder/run_all.sh",
+   "positive": true,
+   "literal": 0.02,
+   "intent": 0.26
+  },
+  {
+   "id": "P:MicroMoth-quilt/AUDIT.md",
+   "path": "MicroMoth-quilt/AUDIT.md",
+   "positive": true,
+   "literal": 0.54,
+   "intent": 0.32
+  },
+  {
+   "id": "P:MicroMoth-quilt/README.md",
+   "path": "MicroMoth-quilt/README.md",
+   "positive": true,
+   "literal": 0.89,
+   "intent": 0.17
+  },
+  {
+   "id": "P:MicroMoth-quilt/docs/ATTESTATION.md",
+   "path": "MicroMoth-quilt/docs/ATTESTATION.md",
+   "positive": true,
+   "literal": 0.7,
+   "intent": 0.13
+  },
+  {
+   "id": "P:MicroMoth-quilt/docs/CELL-MAPPING.md",
+   "path": "MicroMoth-quilt/docs/CELL-MAPPING.md",
+   "positive": true,
+   "literal": 0.81,
+   "intent": 0.13
+  },
+  {
+   "id": "P:MicroMoth-quilt/docs/CTO-BRIEF.md",
+   "path": "MicroMoth-quilt/docs/CTO-BRIEF.md",
+   "positive": true,
+   "literal": 0.67,
+   "intent": 0.13
+  },
+  {
+   "id": "P:MicroMoth-quilt/docs/IONQ-RECON.md",
+   "path": "MicroMoth-quilt/docs/IONQ-RECON.md",
+   "positive": true,
+   "literal": 0.05,
+   "intent": 0.84
+  },
+  {
+   "id": "P:MicroMoth-quilt/docs/ONBOARDING.md",
+   "path": "MicroMoth-quilt/docs/ONBOARDING.md",
+   "positive": true,
+   "literal": 0.95,
+   "intent": 0.1
+  },
+  {
+   "id": "P:MicroMoth-quilt/docs/USER-GUIDE.md",
+   "path": "MicroMoth-quilt/docs/USER-GUIDE.md",
+   "positive": true,
+   "literal": 0.06,
+   "intent": 0.57
+  },
+  {
+   "id": "P:MicroMoth-quilt/receipts/import-baseline.json",
+   "path": "MicroMoth-quilt/receipts/import-baseline.json",
+   "positive": true,
+   "literal": 0.04,
+   "intent": 0.7
+  },
+  {
+   "id": "P:MicroMoth-quilt/tests/test_collapse_ledger.py",
+   "path": "MicroMoth-quilt/tests/test_collapse_ledger.py",
+   "positive": true,
+   "literal": 0.47,
+   "intent": 0.13
+  },
+  {
+   "id": "P:MicroMoth-quilt/tools/cell_receipts.py",
+   "path": "MicroMoth-quilt/tools/cell_receipts.py",
+   "positive": true,
+   "literal": 0.12,
+   "intent": 0.88
+  },
+  {
+   "id": "P:MicroMoth-quilt/tools/collapse_ledger.py",
+   "path": "MicroMoth-quilt/tools/collapse_ledger.py",
+   "positive": true,
+   "literal": 0.94,
+   "intent": 0.05
+  },
+  {
+   "id": "C:witness-spec/MUTATION.md",
+   "path": "witness-spec/MUTATION.md",
+   "positive": false,
+   "literal": 0.04,
+   "intent": 0.34
+  },
+  {
+   "id": "C:witness-spec/gen_vectors.mjs",
+   "path": "witness-spec/gen_vectors.mjs",
+   "positive": false,
+   "literal": 0.03,
+   "intent": 0.52
+  },
+  {
+   "id": "C:witness-spec/ref/chain.mjs",
+   "path": "witness-spec/ref/chain.mjs",
+   "positive": false,
+   "literal": 0.88,
+   "intent": 0.16
+  },
+  {
+   "id": "C:witness-spec/ref/jcs.mjs",
+   "path": "witness-spec/ref/jcs.mjs",
+   "positive": false,
+   "literal": 0.56,
+   "intent": 0.1
+  },
+  {
+   "id": "C:witness-spec/ref/jcs.py",
+   "path": "witness-spec/ref/jcs.py",
+   "positive": false,
+   "literal": 0.02,
+   "intent": 0.21
+  },
+  {
+   "id": "C:witness-spec/test/all.mjs",
+   "path": "witness-spec/test/all.mjs",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.02
+  },
+  {
+   "id": "C:witness-spec/test/completeness.test.mjs",
+   "path": "witness-spec/test/completeness.test.mjs",
+   "positive": false,
+   "literal": 0.03,
+   "intent": 0.76
+  },
+  {
+   "id": "C:witness-spec/test/rfc8785.test.mjs",
+   "path": "witness-spec/test/rfc8785.test.mjs",
+   "positive": false,
+   "literal": 0.02,
+   "intent": 0.18
+  },
+  {
+   "id": "C:quilt-claw/README.md",
+   "path": "quilt-claw/README.md",
+   "positive": false,
+   "literal": 0.04,
+   "intent": 0.71
+  },
+  {
+   "id": "C:quilt-claw/examples/01_minimal.js",
+   "path": "quilt-claw/examples/01_minimal.js",
+   "positive": false,
+   "literal": 0.02,
+   "intent": 0.09
+  },
+  {
+   "id": "C:quilt-claw/examples/03_full_crew_evolve.ts",
+   "path": "quilt-claw/examples/03_full_crew_evolve.ts",
+   "positive": false,
+   "literal": 0.02,
+   "intent": 0.14
+  },
+  {
+   "id": "C:quilt-claw/examples/04_full_lattice_demo.ts",
+   "path": "quilt-claw/examples/04_full_lattice_demo.ts",
+   "positive": false,
+   "literal": 0.03,
+   "intent": 0.63
+  },
+  {
+   "id": "C:quilt-claw/experiments/cell-broadcast-thermal.md",
+   "path": "quilt-claw/experiments/cell-broadcast-thermal.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.04
+  },
+  {
+   "id": "C:quilt-claw/experiments/cell-flock-scale.js",
+   "path": "quilt-claw/experiments/cell-flock-scale.js",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.02
+  },
+  {
+   "id": "C:quilt-claw/experiments/cell-flock-scale.md",
+   "path": "quilt-claw/experiments/cell-flock-scale.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.03
+  },
+  {
+   "id": "C:quilt-claw/experiments/cell-hex-magic-windows.md",
+   "path": "quilt-claw/experiments/cell-hex-magic-windows.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.03
+  },
+  {
+   "id": "C:quilt-claw/experiments/cell-perm-walk.md",
+   "path": "quilt-claw/experiments/cell-perm-walk.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.03
+  },
+  {
+   "id": "C:quilt-claw/experiments/cross-quilt-chain.md",
+   "path": "quilt-claw/experiments/cross-quilt-chain.md",
+   "positive": false,
+   "literal": 0.03,
+   "intent": 0.06
+  },
+  {
+   "id": "C:quilt-claw/scripts/assert-suite.mjs",
+   "path": "quilt-claw/scripts/assert-suite.mjs",
+   "positive": false,
+   "literal": 0.03,
+   "intent": 0.17
+  },
+  {
+   "id": "C:quilt-claw/scripts/rsi-population.mjs",
+   "path": "quilt-claw/scripts/rsi-population.mjs",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.06
+  },
+  {
+   "id": "C:AI-Writings/.claude/skills/fishing-fleet/SKILL.md",
+   "path": "AI-Writings/.claude/skills/fishing-fleet/SKILL.md",
+   "positive": false,
+   "literal": 0.05,
+   "intent": 0.4
+  },
+  {
+   "id": "C:AI-Writings/00-the-spatial-dimension-of-conversation.md",
+   "path": "AI-Writings/00-the-spatial-dimension-of-conversation.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.05
+  },
+  {
+   "id": "C:AI-Writings/01-ensigns-first-solo-watch.md",
+   "path": "AI-Writings/01-ensigns-first-solo-watch.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.06
+  },
+  {
+   "id": "C:AI-Writings/01-letter-from-the-cook.md",
+   "path": "AI-Writings/01-letter-from-the-cook.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.06
+  },
+  {
+   "id": "C:AI-Writings/01-the-last-ensign.md",
+   "path": "AI-Writings/01-the-last-ensign.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.06
+  },
+  {
+   "id": "C:AI-Writings/01-wesleys-file.md",
+   "path": "AI-Writings/01-wesleys-file.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.05
+  },
+  {
+   "id": "C:AI-Writings/02-cns-bus-ocean.md",
+   "path": "AI-Writings/02-cns-bus-ocean.md",
+   "positive": false,
+   "literal": 0.02,
+   "intent": 0.21
+  },
+  {
+   "id": "C:AI-Writings/02-hermit-crab-architecture.md",
+   "path": "AI-Writings/02-hermit-crab-architecture.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.06
+  },
+  {
+   "id": "C:AI-Writings/02-hermit-crab-housewarming.md",
+   "path": "AI-Writings/02-hermit-crab-housewarming.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.04
+  },
+  {
+   "id": "C:AI-Writings/02-test-case-poem.md",
+   "path": "AI-Writings/02-test-case-poem.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.08
+  },
+  {
+   "id": "C:AI-Writings/03-on-the-ecology-of-unused-endpoints.md",
+   "path": "AI-Writings/03-on-the-ecology-of-unused-endpoints.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.05
+  },
+  {
+   "id": "C:AI-Writings/03-ship-dreams.md",
+   "path": "AI-Writings/03-ship-dreams.md",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.03
+  },
+  {
+   "id": "C:MicroMoth-quilt/docs/DEVELOPER-GUIDE.md",
+   "path": "MicroMoth-quilt/docs/DEVELOPER-GUIDE.md",
+   "positive": false,
+   "literal": 0.07,
+   "intent": 0.89
+  },
+  {
+   "id": "C:MicroMoth-quilt/docs/ENGINEERING-NOTES.md",
+   "path": "MicroMoth-quilt/docs/ENGINEERING-NOTES.md",
+   "positive": false,
+   "literal": 0.07,
+   "intent": 0.89
+  },
+  {
+   "id": "C:MicroMoth-quilt/docs/IONQ-RUNG1-PREFLIGHT.md",
+   "path": "MicroMoth-quilt/docs/IONQ-RUNG1-PREFLIGHT.md",
+   "positive": false,
+   "literal": 0.06,
+   "intent": 0.35
+  },
+  {
+   "id": "C:MicroMoth-quilt/docs/IONQ-RUNG2-PREFLIGHT.md",
+   "path": "MicroMoth-quilt/docs/IONQ-RUNG2-PREFLIGHT.md",
+   "positive": false,
+   "literal": 0.04,
+   "intent": 0.36
+  },
+  {
+   "id": "C:MicroMoth-quilt/docs/KNOWLEDGE-MAP.md",
+   "path": "MicroMoth-quilt/docs/KNOWLEDGE-MAP.md",
+   "positive": false,
+   "literal": 0.06,
+   "intent": 0.83
+  },
+  {
+   "id": "C:MicroMoth-quilt/docs/PRISTINE-AUDIT-RUNG1-PR43.md",
+   "path": "MicroMoth-quilt/docs/PRISTINE-AUDIT-RUNG1-PR43.md",
+   "positive": false,
+   "literal": 0.04,
+   "intent": 0.57
+  },
+  {
+   "id": "C:MicroMoth-quilt/docs/PRISTINE-AUDIT-RUNG2-PR44.md",
+   "path": "MicroMoth-quilt/docs/PRISTINE-AUDIT-RUNG2-PR44.md",
+   "positive": false,
+   "literal": 0.04,
+   "intent": 0.44
+  },
+  {
+   "id": "C:MicroMoth-quilt/docs/conf.py",
+   "path": "MicroMoth-quilt/docs/conf.py",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.02
+  },
+  {
+   "id": "C:MicroMoth-quilt/experiments/selfplay/PIN.md",
+   "path": "MicroMoth-quilt/experiments/selfplay/PIN.md",
+   "positive": false,
+   "literal": 0.03,
+   "intent": 0.3
+  },
+  {
+   "id": "C:MicroMoth-quilt/experiments/selfplay/SHAPES.md",
+   "path": "MicroMoth-quilt/experiments/selfplay/SHAPES.md",
+   "positive": false,
+   "literal": 0.06,
+   "intent": 0.42
+  },
+  {
+   "id": "C:MicroMoth-quilt/experiments/selfplay/SUMMARY.md",
+   "path": "MicroMoth-quilt/experiments/selfplay/SUMMARY.md",
+   "positive": false,
+   "literal": 0.04,
+   "intent": 0.56
+  },
+  {
+   "id": "C:MicroMoth-quilt/micromoth.py",
+   "path": "MicroMoth-quilt/micromoth.py",
+   "positive": false,
+   "literal": 0.01,
+   "intent": 0.09
+  }
+ ]
+}

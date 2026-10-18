@@ -1,0 +1,15 @@
+{
+  "name": "witness-anchor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The fleet's OUT-OF-BAND witness anchor -- a Cloudflare Worker that publishes signed heads and computes the linkage class from EVIDENCE, not from a claim",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "miniflare": "^4.0.0"
+  }
+}
