@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>witness-anchor — the fleet's out-of-band witness anchor</title>
+<style>
+  :root{--bg:#0b0d12;--fg:#e8ecf4;--dim:#8b97ad;--line:#1e2530;--acc:#5eead4;--warn:#fbbf24;--bad:#f87171;--good:#4ade80;--card:#12161e}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 ui-sans-serif,-apple-system,"Segoe UI",Inter,system-ui,sans-serif}
+  .wrap{max-width:920px;margin:0 auto;padding:56px 24px 96px}
+  h1{font-size:clamp(30px,5vw,52px);line-height:1.08;margin:0 0 10px;letter-spacing:-.02em}
+  h2{font-size:23px;margin:56px 0 14px;letter-spacing:-.01em;border-top:1px solid var(--line);padding-top:26px}
+  h3{font-size:17px;margin:28px 0 8px;color:var(--acc)}
+  p{margin:0 0 14px}
+  .lede{color:var(--dim);font-size:19px;max-width:66ch}
+  code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px}
+  code{background:var(--card);padding:2px 6px;border-radius:5px;color:#c7d2fe}
+  pre{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;overflow:auto;margin:0 0 18px}
+  pre code{background:none;padding:0;color:#dbe4f5}
+  .k{color:var(--acc)}.w{color:var(--warn)}.b{color:var(--bad)}.g{color:var(--good)}.d{color:var(--dim)}
+  .big{font-size:clamp(40px,9vw,84px);font-weight:800;letter-spacing:-.03em;line-height:1;margin:26px 0 6px}
+  .sub{color:var(--dim);margin-bottom:30px}
+  table{width:100%;border-collapse:collapse;margin:16px 0 22px;font-size:14.5px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{color:var(--dim);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.07em}
+  td.num{text-align:right;font-family:ui-monospace,monospace}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0}
+  .pill{display:inline-block;font-size:11.5px;padding:2px 9px;border-radius:99px;border:1px solid var(--line);color:var(--dim);margin-right:6px}
+  .pill.g{color:var(--good);border-color:#1f4d35}.pill.w{color:var(--warn);border-color:#4d3c15}.pill.b{color:var(--bad);border-color:#4d2020}
+  ul{padding-left:20px}li{margin:0 0 9px}
+  .big-quote{border-left:3px solid var(--acc);padding:4px 0 4px 18px;margin:22px 0;font-size:19px;color:#d7e0f0}
+  a{color:var(--acc)}
+  .foot{color:var(--dim);font-size:14px;border-top:1px solid var(--line);padding-top:22px;margin-top:56px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:22px 0}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .stat .n{font-size:30px;font-weight:800;letter-spacing:-.02em}
+  .stat .l{color:var(--dim);font-size:13px;margin-top:3px}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>The fleet's out-of-band<br>witness anchor</h1>
+<p class="lede">A Cloudflare Worker that publishes the fleet's signed witness heads and computes
+the linkage class of each one <strong>from evidence</strong> — and refuses the strong word
+when the evidence does not support it.</p>
+
+<p><span class="pill g">23/23 tests pass</span><span class="pill g">no Cloudflare account</span><span class="pill g">no network</span><span class="pill w">1 path unproven</span></p>
+
+<div class="big">npm test</div>
+<p class="sub">The whole Worker — real KV, real R2, real D1, and the vector store — running inside
+<code>workerd</code> on a stock runner, with no credentials at all. Every other Cloudflare
+artifact in this fleet is verified by a workflow that either has no tests or cannot run them.</p>
+
+<h2>What the fleet got wrong</h2>
+<p>The fleet spent a year calling its logs <strong>"tamper-evident"</strong> when they were not.
+A careful sweep of six repos produced 47 corrections, and the finding that
+<strong>no log in the fleet holds all three legs</strong>:</p>
+
+<table>
+<tr><th>leg</th><th>what it means</th><th>who holds it</th></tr>
+<tr><td>1 · re-derives</td><td>the chain recomputes from its own bodies</td><td>everybody</td></tr>
+<tr><td>2 · signed</td><td>the head carries a signature from a key we trust</td><td>two ledgers, optionally</td></tr>
+<tr><td>3 · published out of band</td><td>the head is published where the log writer does not control it</td><td><span class="b">nobody</span></td></tr>
+</table>
+
+<div class="big-quote">A Worker on the fleet's own Cloudflare account is <strong>not</strong> out of band.
+The log writer can push to the account. So a self-anchored chain is <code>attested</code> —
+whatever the publisher asks for.</div>
+
+<h2>The classification, and the refusal</h2>
+<pre><code>same account                -> attested    "self-anchored: the log writer can re-publish it"
+different account,
+  ASSERTED by publisher      -> attested    "ASSERTED, not OBSERVED — no security
+                                          property can rest on it"
+different account,
+  OBSERVED by the anchor     -> tamper-evident
+
+publisher claims more       -> REFUSED, and the refusal is stored
+row-checksum log            -> not a chain: nothing to re-derive FROM</code></pre>
+
+<h3>And it is the account, not the storage</h3>
+<p>R2 and KV are both writable by the account, so neither is out of band by itself. What the anchor
+<i>can</i> do is make a rewrite <strong>visible</strong>: the first head for a chain is the anchor,
+every later publication is an epoch, and the divergence is recorded.</p>
+
+<h2>The workaround: Vectorize is remote-only</h2>
+<pre><code>Binding VECTORS needs to be run remotely</code></pre>
+<p>That is what a local Worker gets when it touches a Vectorize binding. So the fleet's Vectorize
+code — <code>prism</code>'s 18 KB worker, the papers' indexing scripts — <strong>cannot be executed
+by anyone without an account</strong>. Two backends, one interface:</p>
+
+<table>
+<tr><th>backend</th><th>when</th><th>search</th></tr>
+<tr><td><code>vectorize-ann</code></td><td>the binding is present</td><td>approximate (ANN)</td></tr>
+<tr><td><code>d1-exact</code></td><td>otherwise</td><td><strong>exact</strong> — brute-force cosine over D1</td></tr>
+</table>
+<p>The Worker cannot tell them apart, and <strong>every response says which one served it</strong>, so an
+approximate answer is never passed off as an exact one. The exact backend is not a toy:
+<strong>its answer is the truth</strong>, and the ANN path is the approximation it should be checked against.</p>
+
+<h2>The measurement, with a denominator</h2>
+<p>The ground truth is machine-readable because it comes from the <strong>PR diffs</strong>: the 24 files
+four merged PRs changed when the vocabulary was corrected, plus 44 untouched controls.</p>
+
+<table>
+<tr><th>method</th><th>query</th><th class="num">hit@10</th><th class="num">recall@10</th><th class="num">precision@10</th></tr>
+<tr><td>lexical index</td><td>literal</td><td class="num">3</td><td class="num">0.1250</td><td class="num">0.30</td></tr>
+<tr><td>lexical index</td><td>paraphrase</td><td class="num">4</td><td class="num">0.1667</td><td class="num">0.40</td></tr>
+<tr><td><strong>judge (Jev)</strong></td><td><strong>literal</strong></td><td class="num"><strong>10</strong></td><td class="num"><strong>0.4167</strong></td><td class="num"><strong class="g">1.00</strong></td></tr>
+<tr><td><strong>judge (Jev)</strong></td><td>intent</td><td class="num">4</td><td class="num">0.1667</td><td class="num">0.40</td></tr>
+</table>
+
+<div class="grid">
+  <div class="stat"><div class="n g">12/24</div><div class="l">the <strong>union</strong> on the literal question — it beats the judge alone (10/24)</div></div>
+  <div class="stat"><div class="n">2</div><div class="l">positives found <strong>only</strong> by the index</div></div>
+  <div class="stat"><div class="n">9</div><div class="l">positives found <strong>only</strong> by the judge</div></div>
+</div>
+
+<h3>Three things fall out, and they are the design</h3>
+<ul>
+<li>On the literal question the judge is not merely better — it is <strong>perfect on precision</strong>
+(10/10, no false positives) while the index makes <strong>7 false positives in 10</strong>.
+<span class="k">An index cannot decide. It can only propose.</span></li>
+<li>On the intent question the two are <strong>equal</strong> — and the index is free, offline and
+deterministic. So the index is not a cheaper judge; it is a <em>different instrument</em> that is
+equally good at the harder question.</li>
+<li>The <strong>union is bigger than either</strong>, because they find different positives.
+<span class="k">Index proposes, judge decides.</span></li>
+</ul>
+<p class="d" style="font-size:14.5px">A rule, observed: <strong>a gateway failure is never converted into a score.</strong>
+One document failed; it was excluded from the denominator and reported, not scored 0. Scoring a
+transport error as "no" would inflate recall by turning every failure into a correct negative.</p>
+
+<h2>Three bugs the local test caught</h2>
+<p>Running it for real, with no account, found three things that would have shipped:</p>
+<div class="card">
+<p><span class="pill b">1</span> <code>import { createHash } from 'node:crypto'</code> — a Worker cannot
+import a Node builtin without <code>nodejs_compat</code>, and workerd will not resolve it. Replaced
+with <strong>WebCrypto</strong>, so the canonicaliser now has <em>no</em> deployment constraint at all.</p>
+<p><span class="pill b">2</span> <code>Buffer.from(s,'utf8')</code> — <code>Buffer</code> is a Node global
+and does not exist in a Worker. This would have been a runtime error on the first
+<code>calculator-quilt</code> chain, in production, with no warning.</p>
+<p><span class="pill b">3</span> A multi-line D1 statement (miniflare's <code>exec()</code> fails on one)
+and <code>values</code> being a SQLite <strong>reserved word</strong>.</p>
+</div>
+
+<h2>What is proven, and what is not</h2>
+<table>
+<tr><th>PROVEN — by a test anyone can run</th><th>NOT PROVEN</th></tr>
+<tr><td>
+the classification matrix · the two chain rules against the fleet's real chains ·
+the RFC 8785 canonicaliser against the published Appendix B vectors ·
+the whole HTTP surface against real KV/R2/D1 · the ratchet · the exact vector backend ·
+the retrieval measurement
+</td><td>
+<span class="w">the <code>vectorize-ann</code> path</span> — it needs an account, so it has
+<strong>never executed</strong> · <span class="w">the <code>workers-ai</code> embedder</span> ·
+<span class="w">the deployed Worker</span> — nothing is deployed ·
+<span class="b">tamper-evident</span> — nothing holds leg 3
+</td></tr>
+</table>
+
+<h2>The one build that would change the fleet's vocabulary</h2>
+<div class="big-quote">Run the anchor on a <strong>second Cloudflare account</strong>, and have the log
+writer publish to it. Then the anchor can <em>observe</em> that the log came from the first account,
+rather than being told — and the class becomes <code>tamper-evident</code> for real.</div>
+<p>That is one build, not a redesign. And it is the only thing in the fleet that would make
+"tamper-evident" true.</p>
+
+<p class="foot">
+<b>SuperInstance/witness-anchor</b> · <a href="https://github.com/SuperInstance/witness-anchor">github.com/SuperInstance/witness-anchor</a><br>
+Measurements, the corpus builder, and the reproduction steps are in
+<code>scripts/MEASUREMENTS.md</code> in the repository.
+</p>
+
+</div></body></html>
