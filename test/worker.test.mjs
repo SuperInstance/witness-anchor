@@ -65,7 +65,7 @@ const HEAD = '0x75f7a107f3b2ca07854e340e238e842d3183d45f32af445b22323a8d47c4fa9c
 
 test('the anchor publishes a real chain and computes its class', async () => {
   const mf = MF;
-  const res = await mf.dispatchFetch('http://localhost/publish', {
+  const res = await MF.dispatchFetch('http://localhost/publish', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
@@ -92,6 +92,8 @@ test('the anchor publishes a real chain and computes its class', async () => {
 });
 
 test('the same chain, published by the SAME account, is refused the strong word', async () => {
+  // This test needs its OWN instance: it publishes from a DIFFERENT account,
+  // which is the whole point of it.
   const mf = await makeAnchor({ ACCOUNT_ID: 'log-account-A' });
   try {
   const res = await mf.dispatchFetch('http://localhost/publish', {
@@ -113,7 +115,7 @@ test('the same chain, published by the SAME account, is refused the strong word'
 
 test('an UNSIGNED chain is attestable, not attested', async () => {
   const mf = MF;
-  const res = await mf.dispatchFetch('http://localhost/publish', {
+  const res = await MF.dispatchFetch('http://localhost/publish', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ chainId: 'unsigned', chainText: CHAIN, logAccount: 'log-account-A' }),
@@ -125,7 +127,7 @@ test('an UNSIGNED chain is attestable, not attested', async () => {
 
 test('a publisher who CLAIMS tamper-evident and cannot earn it is refused', async () => {
   const mf = MF;
-  const res = await mf.dispatchFetch('http://localhost/publish', {
+  const res = await MF.dispatchFetch('http://localhost/publish', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
@@ -149,14 +151,14 @@ test('the anchor REFUSES TO OVERWRITE a published head, and records the divergen
     chainId: 'ratcheted', chainText, signature: sig,
     logAccount: 'log-account-A', logAccountEvidence: 'asserted',
   });
-  const r1 = await mf.dispatchFetch('http://localhost/publish', {
+  const r1 = await MF.dispatchFetch('http://localhost/publish', {
     method: 'POST', headers: { 'content-type': 'application/json' },
     body: body(CHAIN, signHead(HEAD, Buffer.from('a-key-the-log-writer-does-not-hold'))),
   });
   assert.equal((await r1.json()).kv, 'published');
 
   // a DIFFERENT LOG for the same chain id -> DIVERGED
-  const r2 = await mf.dispatchFetch('http://localhost/publish', {
+  const r2 = await MF.dispatchFetch('http://localhost/publish', {
     method: 'POST', headers: { 'content-type': 'application/json' },
     body: body(OTHER_CHAIN, signHead(OTHER_HEAD, Buffer.from('a-key-the-log-writer-does-not-hold'))),
   });
@@ -165,7 +167,7 @@ test('the anchor REFUSES TO OVERWRITE a published head, and records the divergen
   assert.equal(out2.epoch, 2, 'a second publication is an EPOCH, not a replacement');
 
   // and the head endpoint shows both
-  const r3 = await mf.dispatchFetch('http://localhost/head/ratcheted');
+  const r3 = await MF.dispatchFetch('http://localhost/head/ratcheted');
   const head = await r3.json();
   assert.equal(head.epoch, 2);
   assert.equal(head.attempts.length, 2);
@@ -174,7 +176,7 @@ test('the anchor REFUSES TO OVERWRITE a published head, and records the divergen
 
 test('the vector index answers a query, and says which backend and which embedder', async () => {
   const mf = MF;
-  await mf.dispatchFetch('http://localhost/publish', {
+  await MF.dispatchFetch('http://localhost/publish', {
     method: 'POST', headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       chainId: 'indexed', chainText: CHAIN,
@@ -186,7 +188,7 @@ test('the vector index answers a query, and says which backend and which embedde
       ],
     }),
   });
-  const res = await mf.dispatchFetch('http://localhost/query', {
+  const res = await MF.dispatchFetch('http://localhost/query', {
     method: 'POST', headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ q: 'zzq-unique-claim-9f3a unit vectors' }),
   });
@@ -201,7 +203,7 @@ test('the vector index answers a query, and says which backend and which embedde
 
 test('the stored log is re-verifiable against the published head', async () => {
   const mf = MF;
-  await mf.dispatchFetch('http://localhost/publish', {
+  await MF.dispatchFetch('http://localhost/publish', {
     method: 'POST', headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       chainId: 'reverify', chainText: CHAIN,
@@ -209,7 +211,7 @@ test('the stored log is re-verifiable against the published head', async () => {
       logAccount: 'log-account-A', logAccountEvidence: 'asserted',
     }),
   });
-  const res = await mf.dispatchFetch('http://localhost/verify/reverify');
+  const res = await MF.dispatchFetch('http://localhost/verify/reverify');
   const out = await res.json();
   assert.equal(out.storedLogRederives, true);
   assert.equal(out.matches, true);
@@ -218,7 +220,7 @@ test('the stored log is re-verifiable against the published head', async () => {
 
 test('whoami reports the bindings, the backend, and the trusted key ids', async () => {
   const mf = MF;
-  const res = await mf.dispatchFetch('http://localhost/whoami');
+  const res = await MF.dispatchFetch('http://localhost/whoami');
   const out = await res.json();
   assert.equal(out.account, 'anchor-account-B');
   assert.equal(out.bindings.kv, true);
@@ -227,4 +229,32 @@ test('whoami reports the bindings, the backend, and the trusted key ids', async 
   assert.equal(out.bindings.vectorize, false, 'no Vectorize binding in this test -- that is the whole point');
   assert.equal(out.vectorBackend, 'd1-exact');
   assert.deepEqual(out.trustedKeyIds, ['log-writer-1']);
+});
+
+// ---------------------------------------------------------------------------
+// THE INTEROP CASE: the fleet's reference implementation signs in HEX, and
+// the anchor must accept it. This is the exact form recorder.py produces:
+//
+//     "0x" + hmac.new(key, b"\x03" + head).hexdigest()
+//
+// An anchor that only accepted base64 would be an anchor the fleet's own
+// reference implementation could not use -- and the whole point of the
+// anchor is that the fleet's logs can be published to it.
+// ---------------------------------------------------------------------------
+test('a HEX signature from recorder.py verifies -- the fleet\'s own format', async () => {
+  const { createHmac } = await import('node:crypto');
+  const key = Buffer.from('a-key-the-log-writer-does-not-hold');
+  const hexSig = '0x' + createHmac('sha256', key)
+    .update(Buffer.concat([Buffer.from([0x03]), Buffer.from(HEAD, 'utf8')]))
+    .digest('hex');
+  const res = await MF.dispatchFetch('http://localhost/publish', {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      chainId: 'hexsig', chainText: CHAIN, signature: hexSig,
+      logAccount: 'log-account-A', logAccountEvidence: 'asserted',
+    }),
+  });
+  const out = await res.json();
+  assert.equal(out.signature.signed, true, 'a recorder.py-shaped signature did not verify');
+  assert.equal(out.class.label, 'attested');
 });
