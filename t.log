@@ -1,0 +1,154 @@
+TAP version 13
+# Subtest: all three legs, observed across accounts -> tamper-evident
+ok 1 - all three legs, observed across accounts -> tamper-evident
+  ---
+  duration_ms: 2.06953
+  type: 'test'
+  ...
+# Subtest: the SAME account -> attested, and it says why
+ok 2 - the SAME account -> attested, and it says why
+  ---
+  duration_ms: 0.332382
+  type: 'test'
+  ...
+# Subtest: an ASSERTED log account cannot earn the strong word
+ok 3 - an ASSERTED log account cannot earn the strong word
+  ---
+  duration_ms: 0.375583
+  type: 'test'
+  ...
+# Subtest: unsigned -> attestable, whatever else holds
+ok 4 - unsigned -> attestable, whatever else holds
+  ---
+  duration_ms: 0.31405
+  type: 'test'
+  ...
+# Subtest: a ROW-CHECKSUM log is not a chain, and does not re-derive
+ok 5 - a ROW-CHECKSUM log is not a chain, and does not re-derive
+  ---
+  duration_ms: 0.341446
+  type: 'test'
+  ...
+# Subtest: an UNDECLARED linkage is not a chain, and saying so is the safe default
+ok 6 - an UNDECLARED linkage is not a chain, and saying so is the safe default
+  ---
+  duration_ms: 0.260208
+  type: 'test'
+  ...
+# Subtest: a publisher who claims too much is REFUSED, and the refusal is kept
+ok 7 - a publisher who claims too much is REFUSED, and the refusal is kept
+  ---
+  duration_ms: 0.242332
+  type: 'test'
+  ...
+# Subtest: the class never depends on the request asking for a stronger one
+ok 8 - the class never depends on the request asking for a stronger one
+  ---
+  duration_ms: 0.328758
+  type: 'test'
+  ...
+# Subtest: the vector fixture is unchanged
+ok 9 - the vector fixture is unchanged
+  ---
+  duration_ms: 1.73315
+  type: 'test'
+  ...
+# Subtest: the copied canonicaliser passes all 24 RFC 8785 Appendix B samples
+ok 10 - the copied canonicaliser passes all 24 RFC 8785 Appendix B samples
+  ---
+  duration_ms: 0.366184
+  type: 'test'
+  ...
+# Subtest: the copied canonicaliser passes the RFC 8785 3.2.3 sort-order test
+ok 11 - the copied canonicaliser passes the RFC 8785 3.2.3 sort-order test
+  ---
+  duration_ms: 1.103484
+  type: 'test'
+  ...
+# Subtest: the copied canonicaliser puts the ASTRAL key first (UTF-16 order)
+ok 12 - the copied canonicaliser puts the ASTRAL key first (UTF-16 order)
+  ---
+  duration_ms: 0.456765
+  type: 'test'
+  ...
+# Subtest: the two dialects detect and verify the fleet's REAL chains
+ok 13 - the two dialects detect and verify the fleet's REAL chains
+  ---
+  duration_ms: 44.986876
+  type: 'test'
+  ...
+# Subtest: NEGATIVE: an edited row breaks the chain
+ok 14 - NEGATIVE: an edited row breaks the chain
+  ---
+  duration_ms: 4.159403
+  type: 'test'
+  ...
+# Subtest: NEGATIVE: a plain-parsed calculator chain does NOT verify -- and that is the safe direction
+ok 15 - NEGATIVE: a plain-parsed calculator chain does NOT verify -- and that is the safe direction
+  ---
+  duration_ms: 0.999426
+  type: 'test'
+  ...
+# Subtest: the anchor publishes a real chain and computes its class
+ok 16 - the anchor publishes a real chain and computes its class
+  ---
+  duration_ms: 491.534791
+  type: 'test'
+  ...
+# Subtest: the same chain, published by the SAME account, is refused the strong word
+ok 17 - the same chain, published by the SAME account, is refused the strong word
+  ---
+  duration_ms: 410.761697
+  type: 'test'
+  ...
+# Subtest: an UNSIGNED chain is attestable, not attested
+ok 18 - an UNSIGNED chain is attestable, not attested
+  ---
+  duration_ms: 41.379433
+  type: 'test'
+  ...
+# Subtest: a publisher who CLAIMS tamper-evident and cannot earn it is refused
+ok 19 - a publisher who CLAIMS tamper-evident and cannot earn it is refused
+  ---
+  duration_ms: 54.519526
+  type: 'test'
+  ...
+# Subtest: the anchor REFUSES TO OVERWRITE a published head, and records the divergence
+ok 20 - the anchor REFUSES TO OVERWRITE a published head, and records the divergence
+  ---
+  duration_ms: 148.163846
+  type: 'test'
+  ...
+# Subtest: the vector index answers a query, and says which backend and which embedder
+ok 21 - the vector index answers a query, and says which backend and which embedder
+  ---
+  duration_ms: 55.543574
+  type: 'test'
+  ...
+# Subtest: the stored log is re-verifiable against the published head
+ok 22 - the stored log is re-verifiable against the published head
+  ---
+  duration_ms: 47.269109
+  type: 'test'
+  ...
+# Subtest: whoami reports the bindings, the backend, and the trusted key ids
+ok 23 - whoami reports the bindings, the backend, and the trusted key ids
+  ---
+  duration_ms: 5.186621
+  type: 'test'
+  ...
+# Subtest: a HEX signature from recorder.py verifies -- the fleet's own format
+ok 24 - a HEX signature from recorder.py verifies -- the fleet's own format
+  ---
+  duration_ms: 39.879189
+  type: 'test'
+  ...
+1..24
+# tests 24
+# suites 0
+# pass 24
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2511.326995

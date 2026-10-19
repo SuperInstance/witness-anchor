@@ -47,7 +47,7 @@ const enc = new TextEncoder();
 async function hmacVerify(keyBytes, head, signatureB64) {
   const key = await crypto.subtle.importKey(
     'raw', keyBytes, { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
-  const sig = b64ToBytes(signatureB64);
+  const sig = signatureToBytes(signatureB64);
   const msg = new Uint8Array(1 + enc.encode(head).length);
   msg[0] = 0x03;
   msg.set(enc.encode(head), 1);
@@ -60,7 +60,7 @@ async function ed25519Verify(pubKeyB64, head, signatureB64) {
   const msg = new Uint8Array(1 + enc.encode(head).length);
   msg[0] = 0x03;
   msg.set(enc.encode(head), 1);
-  return crypto.subtle.verify('Ed25519', key, b64ToBytes(signatureB64), msg);
+  return crypto.subtle.verify('Ed25519', key, signatureToBytes(signatureB64), msg);
 }
 
 function b64ToBytes(s) {
@@ -68,6 +68,33 @@ function b64ToBytes(s) {
   const out = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
   return out;
+}
+
+// A SIGNATURE ARRIVES IN WHICHEVER FORM THE SIGNER USED, and the fleet has
+// TWO forms in play:
+//
+//   * recorder.py's sign_head() returns HEX with an "0x" prefix:
+//         "0x" + hmac.new(key, b"\x03" + head).hexdigest()
+//   * most other signers return BASE64.
+//
+// The anchor accepts BOTH, because an anchor that only accepts one of them
+// is an anchor the fleet's own reference implementation cannot use -- and
+// the whole point of the anchor is that the fleet's logs can be published
+// to it. The format is detected from the string, not asked for.
+function signatureToBytes(sig) {
+  const t = String(sig).trim();
+  if (/^0x[0-9a-fA-F]+$/.test(t)) {
+    const h = t.slice(2);
+    const out = new Uint8Array(h.length / 2);
+    for (let i = 0; i < out.length; i++) out[i] = parseInt(h.substr(i * 2, 2), 16);
+    return out;
+  }
+  if (/^[0-9a-fA-F]+$/.test(t) && t.length % 2 === 0) {
+    const out = new Uint8Array(t.length / 2);
+    for (let i = 0; i < out.length; i++) out[i] = parseInt(t.substr(i * 2, 2), 16);
+    return out;
+  }
+  return b64ToBytes(t);
 }
 
 async function trustedKeys(env) {

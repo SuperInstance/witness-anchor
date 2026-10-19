@@ -67,6 +67,26 @@ export async function witnessChainVerify(records) {
 // ---------------------------------------------------------------------------
 // The calculator-quilt rule. Python's json.dumps, FNV over UTF-8 bytes,
 // and the `prev` field OVERWRITTEN with the running tip before hashing.
+//
+// AND THE VOCABULARY, because the SOURCE'S OWN DOCSTRING SAID
+// "tamper-evident" and it was wrong:
+//
+//     def verify_chain(records) -> bool:
+//         """Re-derive each hash from the running prev; tamper-evident."""
+//
+// **That docstring is where this chain RULE comes from**, so the dialect
+// inherited a false claim about itself. It was wrong in a way that
+// mattered: the chain re-derives, which is LEG 1 of 3. A re-chained edit
+// verifies perfectly and a truncated tail still verifies, so a re-chained
+// rewrite is indistinguishable from the original -- and the head is
+// neither signed nor published out of band, so legs 2 and 3 do not exist
+// either.
+//
+// A chain rule and its documentation are the SAME artifact, and correcting
+// one without the other leaves the lie in the place someone will read
+// next. The source docstring is corrected in the same change
+// (SuperInstance/AI-Writings). The honest word for this chain is
+// ATTESTABLE.
 // ---------------------------------------------------------------------------
 const PY_RAW = '__PYRAW_NUM__';
 const CQ_GENESIS = '0x0000000000000000';
